@@ -8,6 +8,7 @@ describe("Maintainer Kit workflow", () => {
 
     assert.match(workflow, /pull-requests: write/);
     assert.match(workflow, /node src\/cli\.js pr-comment/);
+    assert.match(workflow, /--config \.maintainer-kit\.yml/);
     assert.match(workflow, /pr-comment\.md/);
     assert.match(workflow, /actions\/github-script@v7/);
     assert.match(workflow, /oss-maintainer-kit:pr-review/);

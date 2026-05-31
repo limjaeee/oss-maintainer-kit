@@ -85,6 +85,51 @@ describe("cli", () => {
     assert.match(result.stdout, /Risk: \*\*high\*\*/);
   });
 
+  it("applies a maintainer config file to PR comments", () => {
+    const dir = mkdtempSync(join(tmpdir(), "maintainer-kit-"));
+    const diffPath = join(dir, "change.diff");
+    const configPath = join(dir, ".maintainer-kit.yml");
+    writeFileSync(
+      diffPath,
+      [
+        "diff --git a/src/analysis.js b/src/analysis.js",
+        "--- a/src/analysis.js",
+        "+++ b/src/analysis.js",
+        "@@ -1 +1 @@",
+        "+export const ready = true;"
+      ].join("\n")
+    );
+    writeFileSync(
+      configPath,
+      [
+        "criticalPaths:",
+        "  - src/analysis.js",
+        "preferredLabels:",
+        "  critical: critical-path",
+        "compatibilityPolicy: Keep CLI output backward compatible."
+      ].join("\n")
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      [
+        "src/cli.js",
+        "pr-comment",
+        "--diff",
+        diffPath,
+        "--config",
+        configPath,
+        "--repo",
+        "owner/project"
+      ],
+      { encoding: "utf8" }
+    );
+
+    assert.equal(result.status, 0);
+    assert.match(result.stdout, /critical-path/);
+    assert.match(result.stdout, /Configured critical path/);
+  });
+
   it("builds release notes from a log file", () => {
     const dir = mkdtempSync(join(tmpdir(), "maintainer-kit-"));
     const logPath = join(dir, "commits.txt");

@@ -35,6 +35,12 @@ Render the GitHub Action PR comment body:
 git diff origin/main...HEAD | node src/cli.js pr-comment --repo owner/project
 ```
 
+Use repository-specific maintainer conventions:
+
+```bash
+git diff origin/main...HEAD | node src/cli.js pr-comment --repo owner/project --config .maintainer-kit.yml
+```
+
 Triage an issue body:
 
 ```bash
@@ -54,6 +60,7 @@ Use `--json` when another agent or workflow should consume structured output.
 - PR review: risk level, label suggestions, changed-file summary, review focus.
 - PR comment mode: an opt-in GitHub Action comment that is updated instead of duplicated.
 - Security-sensitive checklist: conservative signals for auth, dependencies, secrets, and permissions.
+- Maintainer profile: optional `.maintainer-kit.yml` for critical paths, labels, compatibility policy, release branches, and review expectations.
 - Issue triage: bug/feature/question classification, missing information, reply draft.
 - Release notes: conventional commit grouping, migration-note prompt, follow-up checks.
 

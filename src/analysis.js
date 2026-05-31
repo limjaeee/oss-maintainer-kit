@@ -70,9 +70,12 @@ export function parseUnifiedDiff(diffText) {
   return files;
 }
 
-export function analyzeDiff(diffText) {
+export function analyzeDiff(diffText, config = {}) {
   const files = parseUnifiedDiff(diffText);
   const securitySignals = detectSecuritySignals(diffText, files);
+  const criticalPathMatches = files.filter((file) =>
+    (config.criticalPaths || []).some((pattern) => matchesPathPattern(file.path, pattern))
+  );
   const docsOnly = files.length > 0 && files.every((file) => DOC_PATTERN.test(file.path));
   const touchesTests = files.some((file) => TEST_PATTERN.test(file.path));
   const touchesSecurity =
@@ -99,9 +102,25 @@ export function analyzeDiff(diffText) {
     reviewFocus.push("Check user-visible behavior, backward compatibility, and failure handling.");
   }
 
+  if (criticalPathMatches.length > 0) {
+    riskLevel = "high";
+    recommendedLabels.add(config.preferredLabels?.critical || "critical-path");
+    reviewFocus.push(
+      `Configured critical path changed: ${criticalPathMatches.map((file) => file.path).join(", ")}.`
+    );
+  }
+
   if (touchesSource && !touchesTests) {
     recommendedLabels.add("needs-tests");
     reviewFocus.push("No test files changed; ask whether existing coverage exercises this path.");
+  }
+
+  if (config.compatibilityPolicy) {
+    reviewFocus.push(`Compatibility policy: ${config.compatibilityPolicy}`);
+  }
+
+  for (const expectation of config.reviewExpectations || []) {
+    reviewFocus.push(`Project expectation: ${expectation}`);
   }
 
   return {
@@ -113,8 +132,22 @@ export function analyzeDiff(diffText) {
     reviewFocus,
     securitySignals,
     securityChecklist: securitySignals.map((signal) => signal.checklist),
+    criticalPathMatches: criticalPathMatches.map((file) => file.path),
     files
   };
+}
+
+function matchesPathPattern(path, pattern) {
+  if (pattern.endsWith("/**")) {
+    return path.startsWith(pattern.slice(0, -3));
+  }
+
+  if (pattern.includes("*")) {
+    const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*");
+    return new RegExp(`^${escaped}$`).test(path);
+  }
+
+  return path === pattern;
 }
 
 function detectSecuritySignals(diffText, files) {
