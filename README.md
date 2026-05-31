@@ -55,12 +55,22 @@ git log --oneline --pretty=%s v0.1.0..HEAD | node src/cli.js release-notes --rep
 
 Use `--json` when another agent or workflow should consume structured output.
 
+Send a generated prompt to OpenAI explicitly:
+
+```bash
+node src/cli.js pr-review --diff pr.diff --repo owner/project > prompt.txt
+OPENAI_API_KEY=sk-... node src/cli.js openai-response --input prompt.txt --model gpt-5
+```
+
+Normal review, comment, triage, and release commands do not call OpenAI. See [docs/openai-adapter.md](docs/openai-adapter.md).
+
 ## Maintainer workflows
 
 - PR review: risk level, label suggestions, changed-file summary, review focus.
 - PR comment mode: an opt-in GitHub Action comment that is updated instead of duplicated.
 - Security-sensitive checklist: conservative signals for auth, dependencies, secrets, and permissions.
 - Maintainer profile: optional `.maintainer-kit.yml` for critical paths, labels, compatibility policy, release branches, and review expectations.
+- OpenAI adapter: explicit `openai-response` command for sending maintainer prompts to the Responses API.
 - Issue triage: bug/feature/question classification, missing information, reply draft.
 - Release notes: conventional commit grouping, migration-note prompt, follow-up checks.
 

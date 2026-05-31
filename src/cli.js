@@ -5,6 +5,7 @@ import { stdin, stdout, stderr, exit } from "node:process";
 import { analyzeDiff, analyzeIssue, buildReleaseNotes } from "./analysis.js";
 import { buildPrComment } from "./comments.js";
 import { loadMaintainerConfig } from "./config.js";
+import { requestOpenAIResponse } from "./openai.js";
 import {
   buildIssueTriagePrompt,
   buildPrReviewPrompt,
@@ -18,6 +19,7 @@ Usage:
   oss-maintainer-kit pr-comment --diff <file> [--repo owner/name] [--config .maintainer-kit.yml]
   oss-maintainer-kit issue-triage --issue <file> [--repo owner/name] [--json]
   oss-maintainer-kit release-notes --log <file> [--repo owner/name] [--json]
+  oss-maintainer-kit openai-response --input <file> [--model gpt-5]
 
 If a file option is omitted, input is read from stdin.
 `;
@@ -76,6 +78,17 @@ async function main(argv) {
       payload: { command, notes },
       text: buildReleasePrompt({ repository: options.repo, notes })
     });
+  }
+
+  if (command === "openai-response") {
+    const input = await readInput(options.input);
+    const response = await requestOpenAIResponse({
+      input,
+      model: options.model,
+      apiKey: process.env.OPENAI_API_KEY
+    });
+    stdout.write(`${response.text}\n`);
+    return;
   }
 
   throw new Error(`Unknown command: ${command}`);
