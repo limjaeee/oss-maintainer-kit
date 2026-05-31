@@ -53,6 +53,7 @@ Use `--json` when another agent or workflow should consume structured output.
 
 - PR review: risk level, label suggestions, changed-file summary, review focus.
 - PR comment mode: an opt-in GitHub Action comment that is updated instead of duplicated.
+- Security-sensitive checklist: conservative signals for auth, dependencies, secrets, and permissions.
 - Issue triage: bug/feature/question classification, missing information, reply draft.
 - Release notes: conventional commit grouping, migration-note prompt, follow-up checks.
 

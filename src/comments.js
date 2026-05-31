@@ -12,6 +12,15 @@ export function buildPrComment({ repository, analysis }) {
         (file) => `${file.path} (+${file.additions}/-${file.deletions}, ${file.hunks} hunks)`
       )
     : ["No changed files detected."];
+  const securitySection = analysis.securityChecklist?.length
+    ? [
+        "",
+        "### Security checklist",
+        ...asBullets(analysis.securityChecklist),
+        "",
+        "Treat these as review prompts, not confirmed vulnerabilities."
+      ]
+    : [];
 
   return [
     COMMENT_MARKER,
@@ -27,6 +36,7 @@ export function buildPrComment({ repository, analysis }) {
     "",
     "### Changed files",
     ...asBullets(fileItems),
+    ...securitySection,
     "",
     "### Maintainer note",
     "This comment is a starting point. Review the code, tests, compatibility impact, and project conventions before acting."
