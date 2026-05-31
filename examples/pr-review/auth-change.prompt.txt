@@ -1,0 +1,16 @@
+Repository: limjaeee/oss-maintainer-kit
+Risk level: high
+Files changed: 1
+
+Use tacit maintainer judgment: infer project conventions, compatibility risks, and release impact from the concrete changes below.
+
+Review focus:
+- Security-sensitive paths changed; review authentication, authorization, secrets, and dependency impact.
+- No test files changed; ask whether existing coverage exercises this path.
+
+Recommended labels: security, needs-tests
+
+Changed files:
+- src/auth/session.js (+3/-2, 1 hunks)
+
+Return: risk summary, blocking concerns, missing tests, compatibility notes, and a maintainer-ready PR comment.

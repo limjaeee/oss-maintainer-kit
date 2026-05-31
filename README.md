@@ -49,6 +49,10 @@ Use `--json` when another agent or workflow should consume structured output.
 - Issue triage: bug/feature/question classification, missing information, reply draft.
 - Release notes: conventional commit grouping, migration-note prompt, follow-up checks.
 
+## Examples
+
+See [examples/README.md](examples/README.md) for sample pull request diffs, issue reports, release commit logs, and generated maintainer outputs.
+
 ## Codex for Open Source fit
 
 This repository is designed around the work OpenAI describes for Codex for Open Source: PR review, maintainer automation, issue triage, and release workflows. The project can use API credits to run these workflows at scale across public repositories while preserving maintainer review as the final decision point.
