@@ -82,7 +82,7 @@ See [examples/README.md](examples/README.md) for sample pull request diffs, issu
 
 This repository is designed around the work OpenAI describes for Codex for Open Source: PR review, maintainer automation, issue triage, and release workflows. The project can use API credits to run these workflows at scale across public repositories while preserving maintainer review as the final decision point.
 
-See [docs/application-draft.md](docs/application-draft.md) for a ready-to-edit application draft.
+See [docs/application-draft.md](docs/application-draft.md) for a ready-to-edit application draft and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Roadmap
 
