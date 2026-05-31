@@ -59,6 +59,32 @@ describe("cli", () => {
     assert.equal(payload.analysis.riskLevel, "medium");
   });
 
+  it("renders PR comment markdown from a diff file", () => {
+    const dir = mkdtempSync(join(tmpdir(), "maintainer-kit-"));
+    const diffPath = join(dir, "change.diff");
+    writeFileSync(
+      diffPath,
+      [
+        "diff --git a/src/auth.js b/src/auth.js",
+        "--- a/src/auth.js",
+        "+++ b/src/auth.js",
+        "@@ -1 +1 @@",
+        "+export const token = 'redacted';"
+      ].join("\n")
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      ["src/cli.js", "pr-comment", "--diff", diffPath, "--repo", "owner/project"],
+      { encoding: "utf8" }
+    );
+
+    assert.equal(result.status, 0);
+    assert.match(result.stdout, /<!-- oss-maintainer-kit:pr-review -->/);
+    assert.match(result.stdout, /Repository: `owner\/project`/);
+    assert.match(result.stdout, /Risk: \*\*high\*\*/);
+  });
+
   it("builds release notes from a log file", () => {
     const dir = mkdtempSync(join(tmpdir(), "maintainer-kit-"));
     const logPath = join(dir, "commits.txt");
