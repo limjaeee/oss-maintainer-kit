@@ -1,0 +1,24 @@
+{
+  "name": "oss-maintainer-kit",
+  "version": "0.1.0",
+  "description": "Codex-ready automation for small open-source maintainers.",
+  "type": "module",
+  "bin": {
+    "oss-maintainer-kit": "./src/cli.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "open-source",
+    "maintainer",
+    "codex",
+    "pull-request",
+    "triage"
+  ],
+  "license": "MIT"
+}
