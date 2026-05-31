@@ -1,0 +1,14 @@
+criticalPaths:
+  - src/**
+  - .github/workflows/**
+preferredLabels:
+  critical: critical-path
+  security: security
+  tests: needs-tests
+compatibilityPolicy: Keep CLI commands and JSON fields backward compatible unless release notes call out a breaking change.
+releaseBranches:
+  - main
+reviewExpectations:
+  - Prefer focused pull requests with tests for new behavior.
+  - Make uncertainty explicit when security-sensitive paths change.
+  - Keep generated comments actionable and concise.

@@ -4,6 +4,7 @@ import { stdin, stdout, stderr, exit } from "node:process";
 
 import { analyzeDiff, analyzeIssue, buildReleaseNotes } from "./analysis.js";
 import { buildPrComment } from "./comments.js";
+import { loadMaintainerConfig } from "./config.js";
 import {
   buildIssueTriagePrompt,
   buildPrReviewPrompt,
@@ -14,7 +15,7 @@ const USAGE = `oss-maintainer-kit
 
 Usage:
   oss-maintainer-kit pr-review --diff <file> [--repo owner/name] [--json]
-  oss-maintainer-kit pr-comment --diff <file> [--repo owner/name]
+  oss-maintainer-kit pr-comment --diff <file> [--repo owner/name] [--config .maintainer-kit.yml]
   oss-maintainer-kit issue-triage --issue <file> [--repo owner/name] [--json]
   oss-maintainer-kit release-notes --log <file> [--repo owner/name] [--json]
 
@@ -37,7 +38,8 @@ async function main(argv) {
 
   if (command === "pr-review") {
     const diff = await readInput(options.diff);
-    const analysis = analyzeDiff(diff);
+    const config = await loadMaintainerConfig(options.config);
+    const analysis = analyzeDiff(diff, config);
     return writeResult({
       json: options.json,
       payload: { command, analysis },
@@ -47,7 +49,8 @@ async function main(argv) {
 
   if (command === "pr-comment") {
     const diff = await readInput(options.diff);
-    const analysis = analyzeDiff(diff);
+    const config = await loadMaintainerConfig(options.config);
+    const analysis = analyzeDiff(diff, config);
     return writeResult({
       json: false,
       payload: { command, analysis },
