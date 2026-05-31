@@ -15,7 +15,9 @@ describe("prompt builders", () => {
         riskLevel: "medium",
         files: [{ path: "src/cli.js", additions: 10, deletions: 2, hunks: 1 }],
         reviewFocus: ["Check CLI argument compatibility."],
-        recommendedLabels: ["needs-tests"]
+        recommendedLabels: ["needs-tests"],
+        securitySignals: [],
+        securityChecklist: []
       }
     });
 
@@ -24,13 +26,34 @@ describe("prompt builders", () => {
     assert.match(prompt, /tacit maintainer judgment/i);
   });
 
+  it("includes security checklist items with uncertainty wording", () => {
+    const prompt = buildPrReviewPrompt({
+      repository: "owner/project",
+      analysis: {
+        riskLevel: "high",
+        filesChanged: 1,
+        files: [{ path: "src/auth/session.js", additions: 3, deletions: 1, hunks: 1 }],
+        reviewFocus: ["Security-sensitive paths changed."],
+        recommendedLabels: ["security"],
+        securitySignals: [{ type: "authentication", path: "src/auth/session.js" }],
+        securityChecklist: ["Verify authorization boundaries and session lifecycle."]
+      }
+    });
+
+    assert.match(prompt, /Security checklist/);
+    assert.match(prompt, /Verify authorization boundaries/);
+    assert.match(prompt, /Treat these as review prompts, not confirmed vulnerabilities/);
+  });
+
   it("uses fallbacks when optional PR fields are absent", () => {
     const prompt = buildPrReviewPrompt({
       analysis: {
         riskLevel: "low",
         files: [],
         reviewFocus: [],
-        recommendedLabels: []
+        recommendedLabels: [],
+        securitySignals: [],
+        securityChecklist: []
       }
     });
 

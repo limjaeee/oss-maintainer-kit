@@ -8,6 +8,10 @@ Review focus:
 - Security-sensitive paths changed; review authentication, authorization, secrets, and dependency impact.
 - No test files changed; ask whether existing coverage exercises this path.
 
+Security checklist:
+- Verify authorization boundaries, authentication bypass risk, session lifecycle, and compatibility with existing login flows.
+Treat these as review prompts, not confirmed vulnerabilities.
+
 Recommended labels: security, needs-tests
 
 Changed files:

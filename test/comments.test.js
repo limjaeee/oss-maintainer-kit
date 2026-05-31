@@ -17,6 +17,8 @@ describe("buildPrComment", () => {
           "Security-sensitive paths changed; review authentication impact.",
           "No test files changed; ask whether existing coverage exercises this path."
         ],
+        securitySignals: [{ type: "authentication", path: "src/auth/session.js" }],
+        securityChecklist: ["Verify authorization boundaries and session lifecycle."],
         files: [
           {
             path: "src/auth/session.js",
@@ -33,6 +35,8 @@ describe("buildPrComment", () => {
     assert.match(comment, /Risk: \*\*high\*\*/);
     assert.match(comment, /Labels: `security`, `needs-tests`/);
     assert.match(comment, /src\/auth\/session\.js \(\+3\/-2, 1 hunks\)/);
+    assert.match(comment, /Security checklist/);
+    assert.match(comment, /not confirmed vulnerabilities/);
     assert.match(comment, /Maintainer note/);
   });
 
@@ -45,6 +49,8 @@ describe("buildPrComment", () => {
         totalDeletions: 0,
         recommendedLabels: [],
         reviewFocus: [],
+        securitySignals: [],
+        securityChecklist: [],
         files: []
       }
     });

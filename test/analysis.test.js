@@ -63,6 +63,35 @@ describe("analyzeDiff", () => {
     assert.equal(result.riskLevel, "high");
     assert.deepEqual(result.recommendedLabels, ["security", "needs-tests"]);
     assert.match(result.reviewFocus[0], /security-sensitive/i);
+    assert.deepEqual(result.securitySignals.map((signal) => signal.type), [
+      "authentication"
+    ]);
+    assert.match(result.securityChecklist[0], /verify authorization/i);
+  });
+
+  it("detects dependency lockfile and secret handling signals", () => {
+    const diff = [
+      "diff --git a/package-lock.json b/package-lock.json",
+      "--- a/package-lock.json",
+      "+++ b/package-lock.json",
+      "@@ -1 +1 @@",
+      "+{\"name\":\"changed\"}",
+      "diff --git a/src/config.js b/src/config.js",
+      "--- a/src/config.js",
+      "+++ b/src/config.js",
+      "@@ -1 +1 @@",
+      "+export const apiKey = process.env.OPENAI_API_KEY;"
+    ].join("\n");
+
+    const result = analyzeDiff(diff);
+
+    assert.equal(result.riskLevel, "high");
+    assert.deepEqual(result.securitySignals.map((signal) => signal.type), [
+      "dependency",
+      "secret-handling"
+    ]);
+    assert.ok(result.securityChecklist.some((item) => /supply chain/i.test(item)));
+    assert.ok(result.securityChecklist.some((item) => /secret/i.test(item)));
   });
 
   it("treats docs-only diffs as low risk", () => {
@@ -79,6 +108,8 @@ describe("analyzeDiff", () => {
     assert.equal(result.riskLevel, "low");
     assert.deepEqual(result.recommendedLabels, ["documentation"]);
     assert.equal(result.filesChanged, 1);
+    assert.deepEqual(result.securitySignals, []);
+    assert.deepEqual(result.securityChecklist, []);
   });
 });
 

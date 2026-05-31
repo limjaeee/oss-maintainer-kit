@@ -1,4 +1,13 @@
 export function buildPrReviewPrompt({ repository, analysis }) {
+  const securitySection = analysis.securityChecklist?.length
+    ? [
+        "",
+        "Security checklist:",
+        ...asBullets(analysis.securityChecklist),
+        "Treat these as review prompts, not confirmed vulnerabilities."
+      ]
+    : [];
+
   return [
     `Repository: ${repository || "unknown"}`,
     `Risk level: ${analysis.riskLevel}`,
@@ -8,6 +17,7 @@ export function buildPrReviewPrompt({ repository, analysis }) {
     "",
     "Review focus:",
     ...asBullets(analysis.reviewFocus),
+    ...securitySection,
     "",
     `Recommended labels: ${analysis.recommendedLabels.join(", ") || "none"}`,
     "",
