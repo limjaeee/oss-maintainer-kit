@@ -1,0 +1,7 @@
+The CLI crashes on Windows when I run release-notes with a commit log file.
+
+Command:
+node src/cli.js release-notes --log commits.txt
+
+Error:
+TypeError: Cannot read properties of undefined

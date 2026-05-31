@@ -1,0 +1,11 @@
+{
+  "command": "issue-triage",
+  "analysis": {
+    "type": "bug",
+    "suggestedLabels": [
+      "bug",
+      "needs-reproduction"
+    ],
+    "maintainerReply": "Thanks for the report. Please share a minimal reproduction, the exact command, expected behavior, actual behavior, and your environment."
+  }
+}

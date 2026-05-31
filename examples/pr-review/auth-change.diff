@@ -1,0 +1,14 @@
+diff --git a/src/auth/session.js b/src/auth/session.js
+index 1111111..2222222 100644
+--- a/src/auth/session.js
++++ b/src/auth/session.js
+@@ -1,6 +1,7 @@
+ export function createSession(user) {
+-  if (!user.emailVerified) {
+-    throw new Error("Email verification is required.");
++  if (!user) {
++    throw new Error("User is required.");
+   }
++
+   return { userId: user.id, createdAt: Date.now() };
+ }

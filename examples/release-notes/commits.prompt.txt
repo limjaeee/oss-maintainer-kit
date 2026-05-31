@@ -1,0 +1,15 @@
+Repository: limjaeee/oss-maintainer-kit
+
+Draft release notes from these grouped commits. Include migration notes, breaking-change checks, and maintainer follow-up items.
+
+Features:
+- add PR review prompt builder
+
+Fixes:
+- handle empty issue body
+
+Documentation:
+- document GitHub Action usage
+
+Maintenance:
+- update test coverage thresholds
