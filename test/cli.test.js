@@ -145,6 +145,24 @@ describe("cli", () => {
     assert.match(result.stdout, /repair release parser/);
   });
 
+  it("does not call OpenAI without an API key", () => {
+    const dir = mkdtempSync(join(tmpdir(), "maintainer-kit-"));
+    const promptPath = join(dir, "prompt.txt");
+    writeFileSync(promptPath, "Review this PR.");
+
+    const result = spawnSync(
+      process.execPath,
+      ["src/cli.js", "openai-response", "--input", promptPath],
+      {
+        encoding: "utf8",
+        env: { ...process.env, OPENAI_API_KEY: "" }
+      }
+    );
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /OPENAI_API_KEY/);
+  });
+
   it("reports missing option values", () => {
     const result = spawnSync(process.execPath, ["src/cli.js", "pr-review", "--diff"], {
       encoding: "utf8"
