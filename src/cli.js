@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { stdin, stdout, stderr, exit } from "node:process";
 
 import { analyzeDiff, analyzeIssue, buildReleaseNotes } from "./analysis.js";
+import { buildPrComment } from "./comments.js";
 import {
   buildIssueTriagePrompt,
   buildPrReviewPrompt,
@@ -13,6 +14,7 @@ const USAGE = `oss-maintainer-kit
 
 Usage:
   oss-maintainer-kit pr-review --diff <file> [--repo owner/name] [--json]
+  oss-maintainer-kit pr-comment --diff <file> [--repo owner/name]
   oss-maintainer-kit issue-triage --issue <file> [--repo owner/name] [--json]
   oss-maintainer-kit release-notes --log <file> [--repo owner/name] [--json]
 
@@ -40,6 +42,16 @@ async function main(argv) {
       json: options.json,
       payload: { command, analysis },
       text: buildPrReviewPrompt({ repository: options.repo, analysis })
+    });
+  }
+
+  if (command === "pr-comment") {
+    const diff = await readInput(options.diff);
+    const analysis = analyzeDiff(diff);
+    return writeResult({
+      json: false,
+      payload: { command, analysis },
+      text: buildPrComment({ repository: options.repo, analysis })
     });
   }
 

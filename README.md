@@ -29,6 +29,12 @@ Review a pull request diff:
 git diff origin/main...HEAD | node src/cli.js pr-review --repo owner/project
 ```
 
+Render the GitHub Action PR comment body:
+
+```bash
+git diff origin/main...HEAD | node src/cli.js pr-comment --repo owner/project
+```
+
 Triage an issue body:
 
 ```bash
@@ -46,6 +52,7 @@ Use `--json` when another agent or workflow should consume structured output.
 ## Maintainer workflows
 
 - PR review: risk level, label suggestions, changed-file summary, review focus.
+- PR comment mode: an opt-in GitHub Action comment that is updated instead of duplicated.
 - Issue triage: bug/feature/question classification, missing information, reply draft.
 - Release notes: conventional commit grouping, migration-note prompt, follow-up checks.
 
