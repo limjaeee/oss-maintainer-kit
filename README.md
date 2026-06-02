@@ -78,6 +78,10 @@ Normal review, comment, triage, and release commands do not call OpenAI. See [do
 
 See [examples/README.md](examples/README.md) for sample pull request diffs, issue reports, release commit logs, and generated maintainer outputs.
 
+## Adoption
+
+See [docs/adoption-guide.md](docs/adoption-guide.md) for a step-by-step guide to trying `oss-maintainer-kit` in another repository.
+
 ## Codex for Open Source fit
 
 This repository is designed around the work OpenAI describes for Codex for Open Source: PR review, maintainer automation, issue triage, and release workflows. The project can use API credits to run these workflows at scale across public repositories while preserving maintainer review as the final decision point.
