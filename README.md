@@ -82,6 +82,10 @@ See [examples/README.md](examples/README.md) for sample pull request diffs, issu
 
 See [docs/adoption-guide.md](docs/adoption-guide.md) for a step-by-step guide to trying `oss-maintainer-kit` in another repository.
 
+## Maintenance
+
+See [docs/maintainer-health-check.md](docs/maintainer-health-check.md) for the routine maintenance checklist used by this project.
+
 ## Codex for Open Source fit
 
 This repository is designed around the work OpenAI describes for Codex for Open Source: PR review, maintainer automation, issue triage, and release workflows. The project can use API credits to run these workflows at scale across public repositories while preserving maintainer review as the final decision point.
